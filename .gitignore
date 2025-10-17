@@ -1,0 +1,13 @@
+# Virtual Environments
+venv/
+.venv/
+env/
+
+# Operating System Specific
+.DS_Store
+Thumbs.db
+
+# IDE and Build Files (Common examples)
+*.pyc
+/dist
+/build

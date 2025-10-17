@@ -1,0 +1,39 @@
+---
+config:
+  layout: dagre
+---
+flowchart TD
+ subgraph subGraph0["Módulo 1: Coleta e Armazenamento (ETL Serverless AWS)"]
+        B("AWS Lambda")
+        A["Amazon EventBridge"]
+        D{"Amazon RDS - PostgreSQL"}
+  end
+ subgraph subGraph1["Ambiente Local (Sua Máquina)"]
+        E["VS Code / Jupyter"]
+        G(("modelo.pkl"))
+  end
+ subgraph subGraph2["Módulo 2: Ciclo de ML (Híbrido)"]
+        subGraph1
+        H[("Amazon S3 Bucket")]
+  end
+ subgraph subGraph3["Hosting do Frontend (Streamlit Cloud)"]
+        M{"Streamlit Community Cloud"}
+        L["GitHub Repo"]
+  end
+ subgraph subGraph4["Módulo 3: Deploy e Aplicação (Híbrido)"]
+        I["Amazon SageMaker Endpoints"]
+        subGraph3
+        K["Usuário Final"]
+  end
+    A -- Aciona --> B
+    B -- Coleta e Insere --> D
+    E -- Lê de --> D
+    E -- Treina e Exporta --> G
+    G -- Upload --> H
+    I -- Deploy do modelo a partir do --> H
+    L -- Deploy automático --> M
+    M -- Requisita previsão via HTTPS --> I
+    M -- Lê dados históricos via Internet --> D
+    K -- Acessa app público --> M
+    style D fill:#cff,stroke:#333,stroke-width:2px
+    style H fill:#f9f,stroke:#333,stroke-width:2px
