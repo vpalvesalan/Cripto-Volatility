@@ -103,13 +103,16 @@ def fetch_ohlcv_data(symbol: str, start_date: str, timeframe: str = '1h') -> pd.
     return df
 
 if __name__ == '__main__':
+    import os
+    from pathlib import Path
     # Bloco de teste para executar o script diretamente
     
     # Parâmetros de teste
     TEST_SYMBOL = 'BTC/USDT'
-    # Para um teste rápido, usamos uma data de início mais recente.
-    TEST_START_DATE = '2025-09-01'
+    TEST_START_DATE = '2022-01-01'
     TEST_TIMEFRAME = '1h'
+    ROOT = Path(__file__).resolve().parent.parent  # sobe um nível acima de /src
+
 
     # Chama a função
     btc_data = fetch_ohlcv_data(
@@ -127,3 +130,16 @@ if __name__ == '__main__':
         print("\n" + "-"*35)
         print(f"Dimensões do DataFrame: {btc_data.shape}")
         print(f"Período dos dados: de {btc_data.index.min()} até {btc_data.index.max()}")
+
+        try:
+            from pathlib import Path
+            # Caminho da raiz do projeto
+            DATA_RAW = ROOT / "data" / "raw"
+            DATA_RAW.mkdir(parents=True, exist_ok=True)
+            OUT_PATH = DATA_RAW / "test.csv"
+            btc_data.to_csv(OUT_PATH, index=False)
+
+            print("Working directory:", os.getcwd())
+
+        except Exception as e:
+            print("Um erro ocorreu ao tentar salvar o arquivo: ", e)
